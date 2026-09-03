@@ -19,7 +19,7 @@ Building a device that will allow the user to use gestures to control a device e
 - Equipment for soldering, 3D printing, prototyping, and testing
 
 ### Plan - What am I actually going to do?
-- [ ] Blinky - Flash simple code to the Sense module to test basic functionality
+- [x] Blinky - Flash simple code to the Sense module to test basic functionality
 - [ ] Read IMU data - communicate with the onboard IMU and understand what kind of data it produces
 - [ ] Classification of different gestures
 - [ ] Use Human Interface Device functionality (native in BLE) to influence controls on a device
