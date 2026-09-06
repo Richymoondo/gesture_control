@@ -37,4 +37,7 @@ Building a device that will allow the user to use gestures to control a device e
 - Board has no inbuilt debugging, good to know...
   - Because of this, I have to copy and paste the built UF2 file from the build directory onto the XIAO BLE
   - To flash via serial comms, I'll need to solder a header to the board and have an appropriate debug tool as well :( (I guess I took PicKits for granted, lol)
-- [ ] Aim to find a solution to the debug/flashing "issue"
+- [x] Aim to find a solution to the debug/flashing "issue"
+  - So I think I could probably get away with not having a debug tool. I could always just print to the console to debug my code, but it is harder to get information about what's going on in the program.
+  - I can also live with the "drag and drop" method for flashing code to the Sense module.
+  - But I'll get the expansion board anyways, so I have a few less things to worry about when flashing and debuggin code.
