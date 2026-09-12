@@ -20,12 +20,25 @@ Building a device that will allow the user to use gestures to control a device e
 
 ### Plan - What am I actually going to do?
 - [x] Blinky - Flash simple code to the Sense module to test basic functionality
+  - Blinky only flashes one LED, try to control them all
+    - [ ] Flash all LEDs simultaneously
+    - [ ] Flash each LED in sequence
+    - [ ] Use tmiers for favourite LED flashing sequence
+    - [ ] Make LEDs fade in and out
 - [ ] Read IMU data - communicate with the onboard IMU and understand what kind of data it produces
-- [ ] Classification of different gestures
+- Python Testbench
+  - [ ] Understand how SW tesbenches differe from HW ones (if at all)
+  - [ ] Make basic TB to perform handshake with the Sense module
+  - [ ] Develop TB for IMU data... calibration test?
 - [ ] Use Human Interface Device functionality (native in BLE) to influence controls on a device
 - [ ] Start with just tilting the wrist one way or the other to move a mouse onscreen
+- [ ] Update TB to reflect feature updates
+- Classification of different gestures
+  - [ ] Is machine learining required?
+  - [ ] Investigate ML options that are available
 - [ ] Build up to application specific gestures like scrolling or turning a page
 - [ ] If these steps don't touch on things like KConfig or the Devicetree, go back to so if I can create useful custom functions/modules that allow me to explore these areas. Using the [DigiKey Introduction to Zephyr course](https://www.youtube.com/watch?v=mTJ_vKlMS_4&list=PLEBQazB0HUyTmK2zdwhaf8bLwuEaDH-52) as a reference.
+- [ ] Get more familiar with [Markdown](https://commonmark.org/help/tutorial/index.html)
 
 ### Blinky
 - Visual inspection caught no obvious faults
@@ -41,3 +54,5 @@ Building a device that will allow the user to use gestures to control a device e
   - So I think I could probably get away with not having a debug tool. I could always just print to the console to debug my code, but it is harder to get information about what's going on in the program.
   - I can also live with the "drag and drop" method for flashing code to the Sense module.
   - But I'll get the expansion board anyways, so I have a few less things to worry about when flashing and debuggin code.
+  - I missunderstood the purpose of the expansion board. It allows for easier access to peripherals, other Seeed devices, and an external debugger.
+  - I will use the expansion board if useful, and will have to continue with the drag and drop method
