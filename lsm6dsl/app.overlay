@@ -1,0 +1,3 @@
+&lsm6ds3tr_c {
+	zephyr,deferred-init;
+};

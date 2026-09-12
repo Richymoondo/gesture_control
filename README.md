@@ -25,11 +25,12 @@ Building a device that will allow the user to use gestures to control a device e
     - [ ] Flash each LED in sequence
     - [ ] Use tmiers for favourite LED flashing sequence
     - [ ] Make LEDs fade in and out
-- [ ] Read IMU data - communicate with the onboard IMU and understand what kind of data it produces
+- [x] Read IMU data - communicate with the onboard IMU and understand what kind of data it produces
 - Python Testbench
   - [ ] Understand how SW tesbenches differe from HW ones (if at all)
   - [ ] Make basic TB to perform handshake with the Sense module
   - [ ] Develop TB for IMU data... calibration test?
+  - [ ] Display sensor readings on a live graph?
 - [ ] Use Human Interface Device functionality (native in BLE) to influence controls on a device
 - [ ] Start with just tilting the wrist one way or the other to move a mouse onscreen
 - [ ] Update TB to reflect feature updates
@@ -56,3 +57,25 @@ Building a device that will allow the user to use gestures to control a device e
   - But I'll get the expansion board anyways, so I have a few less things to worry about when flashing and debuggin code.
   - I missunderstood the purpose of the expansion board. It allows for easier access to peripherals, other Seeed devices, and an external debugger.
   - I will use the expansion board if useful, and will have to continue with the drag and drop method
+  - Turns out my Ubuntu build had been configured to only access drives once they are clicked/opened. Also preventing straightforward write permissions. Making it impossible to flash code from terminal.
+    -  Commenting out the line `auto nosuid,nodev,nofail,noauto,x-gvfs-show 0 0` in /etc/fstab fixed the forced and unconventional device mounting procedure.
+    - Added an alias so I no longer have to write the full flash/copy code: `alias flashxiao='cp build/*/zephyr/zephyr.uf2 /run/media/$USER/XIAO-SENSE/ ; sync'`
+
+### IMU Testing
+- Used the lsm6dsl example as recomended [here](https://wiki.seeedstudio.com/XIAO-nRF52840-Zephyr-RTOS/#onboard-imu-sense)
+- After flashing the IMU code, the console would only get the message "sensor: device not ready."
+- Found some forums discussing issues around the XIAO BLE Sense and it's use with the LSM6DS3TR [[1]](https://devzone.nordicsemi.com/f/nordic-q-a/109732/running-the-lsm6dls-imu-zephyr-example-with-nrf52840-based-xiao-ble-sense) [[2]](https://github.com/zephyrproject-rtos/zephyr/issues/56012) [[3]](https://devzone.nordicsemi.com/f/nordic-q-a/92711/twim-driver-issue-with-lsm6ds3tc-r?ReplySortBy=Votes&ReplySortOrder=Descending)
+  - Discussions pointed to power supply issues, changes in SDK and toolchain versions, timing issues, and general library isssues. Some suggested to use alternative libraries or modify files that I didn't even know the location of.
+  - I had no access to test-equipment at the time, so was hoping the issue was solely in software.
+  - A warning from `#include <zephyr/drivers/sensor.h>` took me down a rabbit hole trying to modify device tre settings and project configurations.
+  - With so many things to consider and not enough knowledge on where to look in the project code, I used Claude.ai to gain some insight.
+    - Turns out I was looking at the wrong .config file. I needed to look in: build/zephyr/.config instead of ... that helped to confirm that everything was configured as expected.
+    - Claude suggested timing issues
+
+    > ... that virtual port takes a few seconds to wake up and connect after the board resets. Your sample starts printing immediately on boot, so its first messages are sent before your PC is listening — into the void.
+
+    Making is clear what [Just add CONFIG_BOOT_DELAY=5000 to the configuration, so that USB CDC ACM is initialized before any text is printed](https://docs.zephyrproject.org/latest/boards/seeed/xiao_ble/doc/index.html#flashing) was referring to.
+
+    - Introduction to CONFIG_LOG as an additional debug tool: (https://blog.golioth.io/debugging-zephyr-for-beginners-printk-and-the-logging-subsystem/)
+
+    - Finally getting into the IMU initialisation, and using `zephyr,deferred-init;` to manually make the IMU start once I know the device power is stable and running correctly e.g. (https://devzone.nordicsemi.com/f/nordic-q-a/125345/i2c-sensor-fails-to-initialize-when-powered-by-npm1300-pmic-load-switch-after-zephyr-boot)
