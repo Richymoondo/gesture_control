@@ -143,7 +143,7 @@ int main(void)
 
 	while (1) {
 		/* Erase previous */
-		printk("\0033\014");
+		printk("\033c");
 		printf("LSM6DSL sensor samples:\n\n");
 
 		/* lsm6dsl accel */
@@ -179,6 +179,6 @@ int main(void)
 		printk("loop:%d trig_cnt:%d\n\n", ++cnt, lsm6dsl_trig_cnt);
 
 		print_samples = 1;
-		k_sleep(K_MSEC(2000));
+		k_sleep(K_MSEC(500));
 	}
 }
